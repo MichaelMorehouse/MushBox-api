@@ -33,7 +33,7 @@ CREATE TEMP TABLE dates(
 );
 `
 
-createTable = (async (req, res) => {
+createTable = async (req, res) => {
     // note: we don't try/catch this because if connecting throws an exception
     // we don't need to dispose of the client (it will be undefined)
     const client = await pool.connect()
@@ -51,7 +51,7 @@ createTable = (async (req, res) => {
       client.release()
     }
     console.log("we did it boss")
-})().catch(err => console.error(err.stack))
+}
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
