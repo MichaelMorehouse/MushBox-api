@@ -13,7 +13,7 @@ module.exports = {
             return response
         } catch (err) {
             try {
-                client.query("ROLLBACK");
+                client.query('ROLLBACK');
             } catch (err) {
                 console.error("Error rolling back client", err.stack);
             }
