@@ -7,7 +7,6 @@ const db = require('../db')
 // it allows you to use async functions as route handlers
 const router = new Router()
 
-
 const createTableText = `
 CREATE TABLE IF NOT EXISTS dhtlog(
     timestamptz TIMESTAMPTZ,
@@ -16,6 +15,11 @@ CREATE TABLE IF NOT EXISTS dhtlog(
     PRIMARY KEY(timestamptz)
 );
 `
+
+router.get('/create', async (req, res) => {
+    const response = await db.query(createTableText)
+    res.send(response)
+})
 
 router.get('/', async (req, res) => {
   const { rows } = await db.query('SELECT * FROM dhtlog')
@@ -30,12 +34,6 @@ router.post('/', async (req, res) => {
         VALUES ($1, $2, $3);
     `
     const response = await db.query(insertText, [timestamp, temperature, humidity])
-    res.send(response)
-})
-
-router.get('/create', async (req, res) => {
-    console.log("trying boss")
-    const response = await db.query(createTableText)
     res.send(response)
 })
 
