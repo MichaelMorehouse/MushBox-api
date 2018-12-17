@@ -41,9 +41,9 @@ createTable = async (req, res) => {
     try {
       await client.query('BEGIN')
       console.log("trying boss")
-      await client.query(createTableText)
+      const response = await client.query('SELECT NOW()')
       await client.query('COMMIT')
-      
+      console.log(response)
     } catch (e) {
       await client.query('ROLLBACK')
       throw err
