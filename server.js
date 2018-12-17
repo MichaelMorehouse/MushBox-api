@@ -33,7 +33,7 @@ CREATE TEMP TABLE dates(
 );
 `
 
-(async () => {
+const createTable = (async () => {
     // note: we don't try/catch this because if connecting throws an exception
     // we don't need to dispose of the client (it will be undefined)
     const client = await pool.connect()
