@@ -43,17 +43,21 @@ pool.connect((err, client, done) => {
     );
     `
     // create our temp table
-    await client.query(createTableText, (err) => {
+    client.query(createTableText, (err) => {
         if (shouldAbort(err)) return
     })
 
     // insert the current time into it
     const now = new Date()
     const insertText = 'INSERT INTO dates(date_col, timestamp_col, timestamtz_col'
-    await client.query(insertText, [now, now, now])
+    client.query(insertText, [now, now, now], (err) => {
+        if (shouldAbort(err)) return
+    })
 
     // read the row back out
-    const result = await client.query('SELECT * FROM dates')
+    const result = client.query('SELECT * FROM dates', err => {
+        if (shouldAbort(err)) return
+    })
 
     console.log(result.rows)
     done()
