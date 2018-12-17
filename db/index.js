@@ -1,4 +1,4 @@
-const { Pool, Client } = require('pg')
+const { Pool } = require('pg')
 const connectionString = process.env.DATABASE_URL
 
 const pool = new Pool({ connectionString })
@@ -8,8 +8,9 @@ module.exports = {
         const client = await pool.connect()
         try {
             await client.query('BEGIN')
-            await client.query(text, params)
+            const response = await client.query(text, params)
             await client.query('COMMIT')
+            return response
         } catch (err) {
             try {
                 client.query("ROLLBACK");

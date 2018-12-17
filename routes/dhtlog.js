@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS dhtlog(
 `
 
 router.get('/', async (req, res) => {
-  const { rows } = await db.query('SELECT *')
-  res.send(rows[0])
+  const { rows } = await db.query('SELECT * FROM dhtlog')
+  res.send(rows)
 })
 
 router.post('/', async (req, res) => {
