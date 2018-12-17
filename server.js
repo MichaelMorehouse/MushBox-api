@@ -16,6 +16,7 @@ app.post('/data', (req, res) => {
 })
 
 console.log(connectionString)
+console.log("hiiiii boooi")
 
 const pool = new Pool()
 
