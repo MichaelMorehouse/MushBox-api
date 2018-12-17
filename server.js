@@ -18,8 +18,10 @@ app.post('/data', (req, res) => {
 console.log(connectionString)
 console.log("hiiiii boooi")
 
-const pool = new Pool( connectionString )
-
+const pool = new Pool({
+    connectionString: connectionString,
+})
+  
 pool.query('SELECT NOW()', (err, res) => {
     console.log(err, res)
     pool.end()
