@@ -15,16 +15,48 @@ app.post('/data', (req, res) => {
     res.send(req.body)
 })
 
-console.log(connectionString)
-console.log("hiiiii boooi")
-
 const pool = new Pool({
     connectionString: connectionString,
 })
   
-pool.query('SELECT NOW()', (err, res) => {
-    console.log(err, res)
-    pool.end()
+pool.connect((err, client, done) => {
+
+    const shouldAbort = (err) => {
+      if (err) {
+        console.error('Error in transaction', err.stack)
+        client.query('ROLLBACK', (err) => {
+          if (err) {
+            console.error('Error rolling back client', err.stack)
+          }
+          // release the client back to the pool
+          done()
+        })
+      }
+      return !!err
+    }
+
+    const createTableText = `
+        CREATE TEMP TABLE dates(
+        date_col DATE,
+        timestamp_col TIMESTAMP,
+        timestamptz_col TIMESTAMPTZ,
+    );
+    `
+    // create our temp table
+    await client.query(createTableText, (err) => {
+        if (shouldAbort(err)) return
+    })
+
+    // insert the current time into it
+    const now = new Date()
+    const insertText = 'INSERT INTO dates(date_col, timestamp_col, timestamtz_col'
+    await client.query(insertText, [now, now, now])
+
+    // read the row back out
+    const result = await client.query('SELECT * FROM dates')
+
+    console.log(result.rows)
+    done()
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
