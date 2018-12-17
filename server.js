@@ -26,7 +26,7 @@ const pool = new Pool({
 })
 
 const createTableText = () => `
-CREATE TEMP TABLE dates(
+CREATE TABLE dates(
   date_col DATE,
   timestamp_col TIMESTAMP,
   timestamptz_col TIMESTAMPTZ,
@@ -41,7 +41,7 @@ createTable = async (req, res) => {
     try {
       await client.query('BEGIN')
       console.log("trying boss")
-      const response = await client.query('SELECT NOW()')
+      const response = await client.query(createTableText)
       await client.query('COMMIT')
       console.log(response)
     } catch (e) {
@@ -52,6 +52,5 @@ createTable = async (req, res) => {
     }
     console.log("we did it boss")
 }
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
