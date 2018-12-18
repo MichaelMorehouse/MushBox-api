@@ -27,8 +27,8 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { temperature, humidity } = req.query;
-    
+    const { temperature, humidity } = req.body;
+
     const timestamp = new Date();
     const insertText = `
         INSERT INTO dhtlog(timestamptz, temperature, humidity)
