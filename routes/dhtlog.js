@@ -22,7 +22,7 @@ router.get('/create', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-  const { rows } = await db.query('SELECT * FROM dhtlog')
+  const { rows } = await db.query('SELECT * FROM dhtlog LIMIT 100')
   res.send(rows)
 })
 
